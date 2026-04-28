@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+env/
+.env
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+.DS_Store
+
+# Storage
+/tmp/llm_regression_storage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
