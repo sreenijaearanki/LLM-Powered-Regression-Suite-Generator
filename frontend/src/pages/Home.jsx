@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { API_BASE } from '../config'
 import '../styles/Home.css'
 import PRForm from '../components/PRForm'
 import Features from '../components/Features'
@@ -9,7 +10,7 @@ function Home({ onNavigate }) {
   const handleFormSubmit = async (formData) => {
     setIsLoading(true)
     try {
-      const response = await fetch('http://localhost:8000/api/v1/generate-tests', {
+      const response = await fetch(`${API_BASE}/api/v1/generate-tests`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

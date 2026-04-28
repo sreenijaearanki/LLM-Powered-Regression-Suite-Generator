@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API_BASE } from '../config'
 import '../styles/JobStatus.css'
 import ProgressBar from '../components/ProgressBar'
 import TestsList from '../components/TestsList'
@@ -18,7 +19,7 @@ function JobStatus({ jobId, onNavigate }) {
 
     const pollJob = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/jobs/${jobId}`)
+        const response = await fetch(`${API_BASE}/api/v1/jobs/${jobId}`)
         const data = await response.json()
         
         setJobStatus(data)
@@ -30,7 +31,7 @@ function JobStatus({ jobId, onNavigate }) {
           // Fetch generated tests
           if (data.status === 'completed') {
             const testsResponse = await fetch(
-              `http://localhost:8000/api/v1/jobs/${jobId}/tests`
+              `${API_BASE}/api/v1/jobs/${jobId}/tests`
             )
             const testsData = await testsResponse.json()
             setTests(testsData.generated_tests || [])
@@ -52,7 +53,7 @@ function JobStatus({ jobId, onNavigate }) {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/jobs/${jobId}`)
+      const response = await fetch(`${API_BASE}/api/v1/jobs/${jobId}`)
       const data = await response.json()
 
       const content = exportFormat === 'json' 
