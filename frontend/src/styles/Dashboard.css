@@ -1,0 +1,15 @@
+.dashboard-container {}
+.dashboard-header { margin-bottom: 1.5rem; }
+.dashboard-header h1 { font-size: 1.5rem; font-weight: 700; }
+.dashboard-header p { font-size: 0.875rem; color: #666; margin-top: 4px; }
+.dashboard-controls { margin-bottom: 1rem; }
+.filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filter-btn { padding: 0.4rem 0.9rem; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; font-size: 0.8rem; font-weight: 500; color: #555; }
+.filter-btn.active { background: #111; color: #fff; border-color: #111; }
+.jobs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.empty-state { text-align: center; padding: 3rem 1rem; color: #888; }
+.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+.stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; text-align: center; }
+.stat-label { font-size: 0.75rem; color: #888; margin-bottom: 0.25rem; }
+.stat-value { font-size: 1.5rem; font-weight: 700; }

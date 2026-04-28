@@ -1,0 +1,14 @@
+.home-container { max-width: 100%; }
+.hero-section { text-align: center; padding: 2rem 0 1.5rem; }
+.hero-title { font-size: 2rem; font-weight: 700; color: #111; margin-bottom: 0.75rem; }
+.hero-subtitle { font-size: 1rem; color: #555; max-width: 560px; margin: 0 auto 1.5rem; line-height: 1.6; }
+.content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+@media (max-width: 700px) { .content-grid { grid-template-columns: 1fr; } .hero-title { font-size: 1.4rem; } }
+.benefits-section { margin-top: 2rem; }
+.benefits-section h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; text-align: center; }
+.benefits-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media (max-width: 800px) { .benefits-grid { grid-template-columns: repeat(2, 1fr); } }
+.benefit-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem; text-align: center; }
+.benefit-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.benefit-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+.benefit-card p { font-size: 0.8rem; color: #666; line-height: 1.5; }

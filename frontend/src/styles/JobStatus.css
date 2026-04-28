@@ -1,0 +1,36 @@
+.job-status-container {}
+.status-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.status-info h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+.status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+.status-processing { background: #eff6ff; color: #2563eb; }
+.status-completed { background: #f0fdf4; color: #16a34a; }
+.status-failed { background: #fef2f2; color: #dc2626; }
+.progress-section { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+.progress-section h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+.progress-text { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
+.error-banner { background: #fef2f2; color: #dc2626; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.875rem; margin-bottom: 1rem; }
+.results-section { margin-bottom: 1.5rem; }
+.results-section h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+.pr-info-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+.pr-info-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; }
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+@media (max-width: 600px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+.info-item label { font-size: 0.7rem; color: #888; display: block; margin-bottom: 2px; font-weight: 500; text-transform: uppercase; }
+.info-item p { font-size: 0.875rem; font-weight: 500; }
+.test-summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem; }
+.test-summary-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.summary-item { background: #f9fafb; border-radius: 8px; padding: 0.75rem; text-align: center; }
+.summary-label { font-size: 0.7rem; color: #888; margin-bottom: 4px; }
+.summary-value { font-size: 1.25rem; font-weight: 700; }
+.tests-section { margin-top: 1.5rem; }
+.tests-section h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+.export-controls { display: flex; gap: 0.5rem; align-items: center; }
+.export-controls select { padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid #e5e7eb; font-size: 0.875rem; }
+.btn-download { padding: 0.4rem 1rem; border-radius: 6px; border: 1px solid #111; background: #111; color: #fff; cursor: pointer; font-size: 0.875rem; font-weight: 500; }
+.btn-back, .btn-refresh { padding: 0.4rem 1rem; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; font-size: 0.875rem; font-weight: 500; }
+.status-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+.loading-spinner { text-align: center; padding: 3rem; color: #888; }
+.error-message { text-align: center; padding: 2rem; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e5e7eb; border-top-color: #111; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
