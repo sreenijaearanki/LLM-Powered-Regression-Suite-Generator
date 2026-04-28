@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/LLM-Powered-Regression-Suite-Generator/',
   server: {
     port: 3000,
     proxy: {
