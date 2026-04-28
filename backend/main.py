@@ -275,7 +275,7 @@ async def _generate_tests_background(job_id: str, request: PRAnalysisRequest):
             storage_manager.update_job_status(job_id, "generating_tests", int(progress))
             
             try:
-                tests = test_generator.generate_tests(
+                tests = await test_generator.generate_tests(
                     function_info=func_info,
                     code_context=diff_data,
                     llm_service=llm_service,
