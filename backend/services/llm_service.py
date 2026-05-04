@@ -25,7 +25,8 @@ class LLMProvider(ABC):
 class OpenAIProvider(LLMProvider):
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.model = "gpt-4"
+        # Try best model first, fall back to widely-available ones
+        self.models = ["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4"]
         try:
             from openai import AsyncOpenAI
             self.client = AsyncOpenAI(api_key=api_key)
@@ -35,16 +36,25 @@ class OpenAIProvider(LLMProvider):
     async def generate_completion(self, prompt: str,
                                   temperature: float = 0.5,
                                   max_tokens: int = 2000, **kwargs) -> str:
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert software testing specialist."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        return response.choices[0].message.content
+        last_error = None
+        for model in self.models:
+            try:
+                response = await self.client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "You are an expert software testing specialist."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                return response.choices[0].message.content
+            except Exception as e:
+                last_error = e
+                import logging
+                logging.getLogger(__name__).warning(f"Model {model} failed: {e}, trying next...")
+                continue
+        raise last_error
 
     def get_model_info(self) -> Dict:
         return {"provider": "openai", "model": self.model}

@@ -274,12 +274,13 @@ async def _generate_tests_background(job_id: str, request: PRAnalysisRequest):
         
         # Generate tests for each changed function/method
         generated_tests = []
+        llm_errors = []
         total_items = len(code_analysis['changed_functions'])
-        
+
         for idx, func_info in enumerate(code_analysis['changed_functions']):
             progress = 50 + (idx / max(total_items, 1) * 40)
             storage_manager.update_job_status(job_id, "generating_tests", int(progress))
-            
+
             try:
                 tests = await test_generator.generate_tests(
                     function_info=func_info,
@@ -289,7 +290,9 @@ async def _generate_tests_background(job_id: str, request: PRAnalysisRequest):
                 )
                 generated_tests.extend(tests)
             except Exception as e:
-                logger.error(f"Error generating tests for {func_info.get('name')}: {str(e)}")
+                err_msg = str(e)
+                logger.error(f"Error generating tests for {func_info.get('name')}: {err_msg}")
+                llm_errors.append(err_msg)
                 continue
         
         storage_manager.update_job_status(job_id, "formatting_output", 90)
@@ -301,9 +304,10 @@ async def _generate_tests_background(job_id: str, request: PRAnalysisRequest):
             "generated_tests": generated_tests,
             "test_summary": {
                 "total_tests_generated": len(generated_tests),
-                "functions_covered": len([t for t in generated_tests if t.get('function')]),
+                "functions_covered": len([t for t in generated_tests if t.get("function")]),
                 "framework": request.test_framework
             },
+            "llm_errors": llm_errors,
             "timestamp": datetime.now().isoformat()
         }
         
