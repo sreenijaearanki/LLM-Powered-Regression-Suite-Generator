@@ -17,16 +17,20 @@ class GitHubService:
     
     def __init__(self):
         self.session = None
-        
+
     async def _get_session(self, token: Optional[str] = None):
-        """Create or get HTTP session with GitHub auth"""
-        if not self.session:
-            headers = {}
-            if token:
-                headers["Authorization"] = f"token {token}"
-            headers["Accept"] = "application/vnd.github.v3+json"
-            self.session = httpx.AsyncClient(headers=headers, timeout=30.0)
-        return self.session
+        """Create HTTP session, auto-using GITHUB_TOKEN env var as fallback."""
+        import os
+        # Always prefer explicitly passed token, then fall back to env var
+        effective_token = token or os.getenv("GITHUB_TOKEN")
+        headers = {"Accept": "application/vnd.github.v3+json"}
+        if effective_token:
+            headers["Authorization"] = f"token {effective_token}"
+            logger.info("GitHub API: authenticated request (rate limit: 5000/hr)")
+        else:
+            logger.warning("GitHub API: unauthenticated request (rate limit: 60/hr)")
+        # Always create a fresh session so token changes take effect
+        return httpx.AsyncClient(headers=headers, timeout=30.0)
     
     def parse_pr_url(self, url: str) -> Optional[Dict[str, str]]:
         """
@@ -80,6 +84,16 @@ class GitHubService:
             
             url = f"{self.BASE_URL}/repos/{owner}/{repo}/pulls/{pr_number}"
             response = await session.get(url)
+            if response.status_code == 403:
+                raise Exception(
+                    "GitHub API rate limit exceeded. Add a GitHub token in the form "
+                    "to get 5000 requests/hour instead of 60."
+                )
+            if response.status_code == 404:
+                raise Exception(
+                    "PR not found. Check the URL is correct and the repo is public "
+                    "(or provide a GitHub token for private repos)."
+                )
             response.raise_for_status()
             
             pr_data = response.json()
@@ -125,6 +139,16 @@ class GitHubService:
             headers = {"Accept": "application/vnd.github.v3.diff"}
             
             response = await session.get(url, headers=headers)
+            if response.status_code == 403:
+                raise Exception(
+                    "GitHub API rate limit exceeded. Add a GitHub token in the form "
+                    "to get 5000 requests/hour instead of 60."
+                )
+            if response.status_code == 404:
+                raise Exception(
+                    "PR not found. Check the URL is correct and the repo is public "
+                    "(or provide a GitHub token for private repos)."
+                )
             response.raise_for_status()
             
             return response.text
@@ -161,7 +185,17 @@ class GitHubService:
                     url,
                     params={"page": page, "per_page": per_page}
                 )
-                response.raise_for_status()
+                if response.status_code == 403:
+                raise Exception(
+                    "GitHub API rate limit exceeded. Add a GitHub token in the form "
+                    "to get 5000 requests/hour instead of 60."
+                )
+            if response.status_code == 404:
+                raise Exception(
+                    "PR not found. Check the URL is correct and the repo is public "
+                    "(or provide a GitHub token for private repos)."
+                )
+            response.raise_for_status()
                 
                 files = response.json()
                 if not files:
@@ -201,6 +235,16 @@ class GitHubService:
             url = f"{self.BASE_URL}/repos/{owner}/{repo}/contents/{path}"
             
             response = await session.get(url, params={"ref": ref})
+            if response.status_code == 403:
+                raise Exception(
+                    "GitHub API rate limit exceeded. Add a GitHub token in the form "
+                    "to get 5000 requests/hour instead of 60."
+                )
+            if response.status_code == 404:
+                raise Exception(
+                    "PR not found. Check the URL is correct and the repo is public "
+                    "(or provide a GitHub token for private repos)."
+                )
             response.raise_for_status()
             
             import base64
@@ -235,6 +279,16 @@ class GitHubService:
             url = f"{self.BASE_URL}/repos/{owner}/{repo}/pulls/{pr_number}/commits"
             
             response = await session.get(url, params={"per_page": 100})
+            if response.status_code == 403:
+                raise Exception(
+                    "GitHub API rate limit exceeded. Add a GitHub token in the form "
+                    "to get 5000 requests/hour instead of 60."
+                )
+            if response.status_code == 404:
+                raise Exception(
+                    "PR not found. Check the URL is correct and the repo is public "
+                    "(or provide a GitHub token for private repos)."
+                )
             response.raise_for_status()
             
             commits = response.json()
