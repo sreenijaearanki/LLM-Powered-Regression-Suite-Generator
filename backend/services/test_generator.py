@@ -14,12 +14,10 @@ class TestGenerator:
     async def generate_tests(self, function_info: Dict, code_context: str,
                              llm_service, framework: str = "pytest") -> List[Dict]:
         """Async - must be awaited inside FastAPI background tasks."""
-        try:
-            response = await llm_service.generate_tests(function_info, code_context)
-            return self._parse(response, function_info, framework)
-        except Exception as e:
-            logger.error(f"Error generating tests for {function_info.get('name')}: {e}")
-            return []
+        # Do NOT catch exceptions here — let them propagate to main.py
+        # so they are captured in llm_errors and visible in the result.
+        response = await llm_service.generate_tests(function_info, code_context)
+        return self._parse(response, function_info, framework)
 
     def _parse(self, response: str, function_info: Dict, framework: str) -> List[Dict]:
         blocks = re.findall(

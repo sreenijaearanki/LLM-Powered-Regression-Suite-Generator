@@ -121,6 +121,29 @@ async def health_check():
     }
 
 # ============================================================================
+# LLM Test Endpoint
+# ============================================================================
+
+@app.get("/api/v1/test-llm")
+async def test_llm():
+    """Quick test to verify LLM connectivity and API key validity."""
+    import os
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        return {"status": "error", "error": "OPENAI_API_KEY not set on server"}
+    try:
+        llm_service.initialize({"provider": "openai", "api_key": api_key})
+        from services.llm_service import OpenAIProvider
+        provider = OpenAIProvider(api_key)
+        result = await provider.generate_completion(
+            "Say 'LLM connection successful' and nothing else.",
+            max_tokens=20
+        )
+        return {"status": "ok", "response": result, "key_prefix": api_key[:8] + "..."}
+    except Exception as e:
+        return {"status": "error", "error": str(e), "key_prefix": api_key[:8] + "..."}
+
+# ============================================================================
 # PR Analysis Endpoints
 # ============================================================================
 

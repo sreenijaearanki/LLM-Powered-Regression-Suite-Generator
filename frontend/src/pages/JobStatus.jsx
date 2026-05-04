@@ -245,6 +245,22 @@ function JobStatus({ jobId, onNavigate }) {
               <TestsList tests={tests} />
             </div>
           )}
+
+          {tests.length === 0 && jobStatus.result && (
+            <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:'10px',padding:'1.25rem',marginTop:'1rem'}}>
+              <strong style={{color:'#dc2626'}}>⚠ No tests generated</strong>
+              {jobStatus.result.llm_errors && jobStatus.result.llm_errors.length > 0 ? (
+                <div style={{marginTop:'0.5rem',fontSize:'0.875rem',color:'#444'}}>
+                  <strong>LLM Error:</strong> {jobStatus.result.llm_errors.join('; ')}
+                </div>
+              ) : (
+                <p style={{marginTop:'0.5rem',fontSize:'0.875rem',color:'#666'}}>
+                  The LLM call failed silently. Check that OPENAI_API_KEY is set correctly on Render.
+                  Visit <code>/api/v1/test-llm</code> on the backend to diagnose.
+                </p>
+              )}
+            </div>
+          )}
         </>
       )}
 
