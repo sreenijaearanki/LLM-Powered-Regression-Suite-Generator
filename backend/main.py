@@ -104,12 +104,18 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    import os
+    github_token = os.getenv("GITHUB_TOKEN")
+    openai_key = os.getenv("OPENAI_API_KEY")
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
+        "github_token_set": bool(github_token),
+        "openai_key_set": bool(openai_key),
+        "github_rate_limit": "5000/hr" if github_token else "60/hr - GITHUB_TOKEN not set!",
         "services": {
-            "github": "ready",
-            "llm": "ready",
+            "github": "authenticated" if github_token else "unauthenticated - set GITHUB_TOKEN",
+            "llm": "ready" if openai_key else "missing OPENAI_API_KEY",
             "storage": "ready"
         }
     }
