@@ -37,9 +37,7 @@ function PRForm({ onSubmit, isLoading }) {
       newErrors.github_url = 'Please enter a valid GitHub PR URL'
     }
 
-    if (!formData.llm_api_key.trim() && !process.env.REACT_APP_LLM_KEY) {
-      newErrors.llm_api_key = 'LLM API Key is required'
-    }
+    // LLM API key is optional — server uses env var if not provided
 
     return newErrors
   }
@@ -126,14 +124,14 @@ function PRForm({ onSubmit, isLoading }) {
 
         <div className="form-group">
           <label htmlFor="llm_api_key">
-            LLM API Key *
-            <span className="help-text">Or set env variable</span>
+            LLM API Key
+            <span className="help-text">Leave blank — uses server key</span>
           </label>
           <input
             id="llm_api_key"
             type="password"
             name="llm_api_key"
-            placeholder="Your API key..."
+            placeholder="Optional — server key used if blank"
             value={formData.llm_api_key}
             onChange={handleChange}
             disabled={isLoading}
